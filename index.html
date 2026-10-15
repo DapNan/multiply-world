@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Multiply Adventure 3D</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="game-container"></div>
+<!-- ```html -->
+<!-- Landing Screen -->
+<div id="landing-screen">
+    <div class="landing-content">
+
+        <header class="landing-header">
+            <div class="landing-brand">
+                <span class="brand-icon">✦</span>
+                <span>MULTIPLY ADVENTURE</span>
+            </div>
+            <span class="landing-badge">3D LEARNING GAME</span>
+        </header>
+
+        <main class="landing-main">
+            <section class="landing-copy">
+                <div class="landing-eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    PETUALANGAN DIMULAI DI SINI
+                </div>
+
+                <h1>
+                    Multiply
+                    <span>Adventure.</span>
+                </h1>
+
+                <p class="landing-description">
+                    Jelajahi dunia virtual, temukan tantangan,
+                    dan taklukkan berbagai misi perkalian.
+                    Belajar matematika jadi petualangan seru!
+                </p>
+
+                <div class="landing-stats">
+                    <div class="landing-stat">
+                        <span class="stat-icon">🌱</span>
+                        <div>
+                            <strong>Jelajahi</strong>
+                            <small>Dunia 3D</small>
+                        </div>
+                    </div>
+
+                    <div class="landing-stat">
+                        <span class="stat-icon">✖</span>
+                        <div>
+                            <strong>Asah Otak</strong>
+                            <small>Tantangan perkalian</small>
+                        </div>
+                    </div>
+
+                    <div class="landing-stat">
+                        <span class="stat-icon">★</span>
+                        <div>
+                            <strong>Kumpulkan</strong>
+                            <small>Poin petualangan</small>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="start-btn" disabled>
+                    <span class="start-button-icon">▶</span>
+                    <span id="start-btn-label">
+                        Memuat Dunia 3D...
+                    </span>
+                    <span class="start-button-arrow">→</span>
+                </button>
+
+                <p class="landing-footnote">
+                    WASD / tombol panah untuk bergerak
+                </p>
+            </section>
+
+            <!-- Dunia 3D dekoratif dibuat melalui Three.js -->
+            <section class="landing-world">
+                <div class="world-glow"></div>
+
+                <div class="world-label world-label-top">
+                    <span class="world-label-icon">✦</span>
+                    Dunia penuh kejutan
+                </div>
+
+                <div id="landing-world-container"></div>
+
+                <div class="world-label world-label-bottom">
+                    <span class="world-label-icon">🎯</span>
+                    Siap menaklukkan misi?
+                </div>
+            </section>
+        </main>
+
+        <footer class="landing-footer">
+            <span>EXPLORE</span>
+            <span class="footer-separator">✦</span>
+            <span>LEARN</span>
+            <span class="footer-separator">✦</span>
+            <span>ACHIEVE</span>
+        </footer>
+
+    </div>
+</div>
+<!-- BANNER DIALOG PEMICU CERITA (HIDDEN DEFAULT) -->
+<div id="story-banner" style="
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: min(90%, 500px);
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px solid #22c55e;
+    border-radius: 18px;
+    padding: 12px 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    display: none; /* Sembunyikan saat landing */
+    align-items: center;
+    gap: 12px;
+">
+    <div style="font-size: 32px;">👨‍🌾</div>
+    <div style="flex: 1;">
+        <div style="font-size: 11px; font-weight: bold; color: #166534;">PAMAN SAM (PENJAGA KEBUN)</div>
+        <div style="font-size: 13px; font-weight: bold; color: #1e293b; margin-top: 2px;">
+            "Tolong! Hasil panen apel berantakan. Cari Pilar Cahaya Biru untuk membantuku!"
+        </div>
+    </div>
+</div>
+
+<!-- HUD / Adventure Interface -->
+<div id="adventure-hud" class="hidden-game-ui">
+
+    <!-- Profil dan Level -->
+    <div class="hud-profile">
+        <div class="hud-avatar">🧑‍🚀</div>
+
+        <div class="hud-player-info">
+            <div class="hud-player-name">Penjelajah</div>
+            <div class="hud-level">LEVEL <span id="player-level">1</span></div>
+
+            <div class="hud-xp-track">
+                <div id="xp-bar-fill" class="hud-xp-fill"></div>
+            </div>
+            <div class="hud-xp-text">
+                <span>XP PETUALANGAN</span>
+                <span id="xp-text">0 / 100</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hadiah dan Poin -->
+    <div id="score-board" class="hud-reward">
+        <div class="hud-reward-icon">⭐</div>
+        <div class="hud-reward-info">
+            <span class="hud-reward-label">BINTANG</span>
+            <strong id="score-val">0</strong>
+        </div>
+    </div>
+
+    <!-- Status Karakter -->
+    <div id="status" class="hud-status">
+        <span class="hud-status-dot"></span>
+        Diam (Idle)
+    </div>
+
+    <!-- Misi Aktif -->
+    <div id="mission-tracker" class="hud-mission">
+        <div class="hud-mission-heading">
+            <span class="hud-mission-icon">🧭</span>
+            <div>
+                <span class="hud-mission-label">MISI AKTIF</span>
+                <strong id="hud-mission-name">Kebun Perkalian</strong>
+            </div>
+        </div>
+
+        <div class="hud-mission-progress">
+            <span class="hud-mission-pin">📍</span>
+            <span>Menuju lokasi misi</span>
+            <strong><span id="mission-dist">0</span> m</strong>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Kuis Perkalian -->
+<div id="quiz-modal" class="quiz-overlay hidden">
+    <div class="quiz-card">
+        <h2 id="quiz-title">Tantangan Kebun Perkalian! 🌾</h2>
+        <p id="quiz-question">Berapakah 2 × 2 ?</p>
+        <div class="quiz-inputs">
+            <input type="number" id="quiz-answer" placeholder="Jawaban..." autofocus>
+            <button id="quiz-submit-btn">Jawab 🚀</button>
+        </div>
+        <div id="quiz-feedback"></div>
+        <button id="quiz-close-btn" class="quiz-secondary-btn">Nanti Saja</button>
+    </div>
+</div>
+
+    <!-- Mobile Controls -->
+    <div id="mobile-controls" class="hidden-game-ui">
+        <div class="dpad">
+            <button id="btn-up" class="dpad-btn up">▲</button>
+            <div class="dpad-middle">
+                <button id="btn-left" class="dpad-btn left">◄</button>
+                <button id="btn-right" class="dpad-btn right">►</button>
+            </div>
+            <button id="btn-down" class="dpad-btn down">▼</button>
+        </div>
+        <div class="action-btns">
+            <button id="btn-run" class="action-btn">⚡ Lari</button>
+            <button id="btn-jump" class="action-btn primary">🚀 Lompat</button>
+        </div>
+    </div>
+
+    <!-- Overlay Transisi Pindah Dunia -->
+<div id="world-transition-overlay">
+    <div style="font-size: 40px; animation: rocketFloat 1.5s infinite ease-in-out;">🌀</div>
+    <div class="transition-text" id="transition-title">Memasuki Kebun Perkalian...</div>
+</div>
+
+<!-- MODAL PETUNJUK CARA MAIN -->
+<div id="controls-modal-overlay" class="hidden">
+    <div class="controls-card">
+        <h2>🎮 Cara Bermain</h2>
+        <p>Gunakan kontrol berikut untuk menjelajahi kota dan menemukan Pilar Misi!</p>
+
+        <div class="controls-grid">
+            <!-- Kontrol PC -->
+            <div class="control-box">
+                <h3>💻 Laptop / PC</h3>
+                <div>
+                    <span class="key-badge">W</span>
+                    <span class="key-badge">A</span>
+                    <span class="key-badge">S</span>
+                    <span class="key-badge">D</span>
+                </div>
+                <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
+                    Bergerak
+                </div>
+                <div style="margin-top: 4px;">
+                    <span class="key-badge">Space</span> Melompat
+                </div>
+            </div>
+
+            <!-- Kontrol HP -->
+            <div class="control-box">
+                <h3>📱 HP / Tablet</h3>
+                <div style="font-size: 20px; margin-bottom: 4px;">👆 🕹️</div>
+                <div style="font-size: 11px; color: #64748b;">
+                    Usap layar / Gunakan D-Pad Tombol di Layar
+                </div>
+            </div>
+        </div>
+
+        <button id="close-controls-btn" class="controls-close-btn">Siap Main! 🚀</button>
+    </div>
+</div>
+<!-- Modal Percakapan Paman Sam -->
+<div id="paman-sam-modal" class="quiz-overlay hidden">
+    <div class="quiz-card" style="text-align: center; max-width: 400px;">
+        <div style="font-size: 48px; margin-bottom: 8px;">🧑‍🌾</div>
+        <h3 style="color: #22c55e; margin-bottom: 12px;">PAMAN SAM (PENJAGA KEBUN)</h3>
+        <p id="paman-sam-text" style="color: #e2e8f0; font-size: 15px; line-height: 1.5; margin-bottom: 20px;">
+            "Tolong! Hasil panen apel berantakan. Cari Pilar Cahaya Biru untuk membantuku!"
+        </p>
+        <button id="close-paman-sam-btn" class="action-btn primary" style="width: 100%; padding: 12px;">
+            Siap, Paman! 👍
+        </button>
+    </div>
+</div>
+
+<style>
+#world-transition-overlay.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+<script type="module" src="./js/world3d.js?v=2"></script>
+<script type="module" src="./js/game.js?v=2"></script>
+
+</body>
+</html>

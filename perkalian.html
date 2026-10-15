@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiply Adventure - Kebun Perkalian</title>
+<link rel="stylesheet" href="stylemisi1.css">
+</head>
+
+<body>
+<div class="game">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <button id="exit-btn" class="exit-btn">← Keluar ke Dunia 3D</button>
+            <div class="logo">🍎 MULTIPLY ADVENTURE</div>
+        </div>
+
+        <div class="player-stats">
+            <div class="level">LEVEL <span id="level">1</span></div>
+
+            <div class="xp-area">
+                <div class="xp-label">
+                    <span>XP</span>
+                    <span id="xp-text">0/100</span>
+                </div>
+                <div class="xp-track">
+                    <div class="xp-fill" id="xp-fill"></div>
+                </div>
+            </div>
+
+            <div class="stars">⭐ <span id="stars">0</span></div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="badge">🧭 MISI 01 · KEBUN PERKALIAN</div>
+        <h1>Petualangan Kebun Apel!</h1>
+        <p>
+            Ayo bantu penjaga kebun menghitung semua apel.
+            Amati kelompoknya, lalu pilih jawaban yang tepat!
+        </p>
+    </section>
+
+    <main class="content">
+
+        <!-- AREA VISUAL 2D -->
+        <section class="card">
+            <div class="card-title">
+                <h2>🌳 Kebun Apel</h2>
+                <span class="small-label" id="object-count">12 apel</span>
+            </div>
+
+            <div class="garden">
+                <div class="sun"></div>
+                <div class="cloud">☁️</div>
+
+                <div class="garden-hint">
+                    Perhatikan jumlah apel di setiap kelompok!
+                </div>
+
+                <div class="groups" id="groups"></div>
+
+                <div class="garden-footer">
+                    🌱 Kebun Ceria · Hitung dan kumpulkan bintang!
+                </div>
+            </div>
+
+            <div class="explanation">
+                <div class="explanation-title">PERKALIAN = PENJUMLAHAN BERULANG</div>
+                <div class="repeated" id="repeated-addition">4 + 4 + 4 = 12</div>
+            </div>
+        </section>
+
+        <!-- AREA KUIS -->
+        <section class="card question-card">
+            <div id="quiz-content">
+                <div class="card-title">
+                    <h2>🎯 Tantangan Matematika</h2>
+                </div>
+
+                <div class="mission-tag" id="question-number">
+                    SOAL 1 DARI 5
+                </div>
+
+                <div class="question" id="question">
+                    Ada 3 kelompok apel. Setiap kelompok berisi 4 apel.
+                    Berapa jumlah seluruh apel?
+                </div>
+
+                <p class="question-hint" id="question-hint">
+                    Hitung jumlah kelompok, lalu kalikan dengan jumlah apel
+                    di setiap kelompok.
+                </p>
+
+                <div class="answers" id="answers"></div>
+
+                <div class="feedback" id="feedback" aria-live="polite">
+                    💡 Pilih jawaban yang menurutmu benar.
+                </div>
+
+                <button class="next-btn" id="next-btn" disabled>
+                    Soal Berikutnya →
+                </button>
+
+                <div class="progress-info">
+                    <div class="progress-top">
+                        <span>Progres misi</span>
+                        <span id="progress-text">0 dari 5 selesai</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="lesson-note">
+                    💡 <strong>Tips:</strong> Perkalian membantu kita
+                    menghitung kelompok yang memiliki jumlah benda sama.
+                </div>
+            </div>
+
+            <div class="finish" id="finish">
+                <div class="finish-icon">🏆</div>
+                <h2>Misi Kebun Selesai!</h2>
+                <p id="finish-text"></p>
+                <div class="finish-buttons">
+                    <button class="restart-btn" id="restart-btn">
+                        🔄 Main Lagi
+                    </button>
+                    <button class="return-3d-btn" id="return-3d-btn">
+                        🚀 Kembali ke Petualangan 3D
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        Multiply Adventure · Belajar Matematika Sambil Bertualang 🌱
+    </footer>
+</div>
+
+<script>
+const questions = [
+    { groups: 3, each: 4 },
+    { groups: 4, each: 3 },
+    { groups: 2, each: 5 },
+    { groups: 3, each: 3 },
+    { groups: 4, each: 4 }
+];
+
+let currentQuestion = 0;
+let completed = 0;
+let totalXP = 0;
+let totalStars = 0;
+let answered = false;
+
+const $ = id => document.getElementById(id);
+
+// --- 1. SIMPAN DAN MUAT PROGRES (LOCALSTORAGE) ---
+function loadSavedData() {
+    const savedStars = localStorage.getItem('multiply_stars');
+    const savedXP = localStorage.getItem('multiply_xp');
+
+    if (savedStars !== null) totalStars = parseInt(savedStars, 10);
+    if (savedXP !== null) totalXP = parseInt(savedXP, 10);
+
+    updateStats();
+}
+
+function saveData() {
+    localStorage.setItem('multiply_stars', totalStars);
+    localStorage.setItem('multiply_xp', totalXP);
+}
+function returnTo3DWorld() {
+    saveData();
+    // Set flag agar game 3D tahu ini navigasi dari misi (bukan refresh)
+    localStorage.setItem('multiply_from_mission', 'true');
+    window.location.href = 'index.html';
+}
+
+function renderGarden(question) {
+    const groupsEl = $('groups');
+    groupsEl.innerHTML = '';
+
+    for (let i = 0; i < question.groups; i++) {
+        const group = document.createElement('div');
+        group.className = 'apple-group';
+
+        const apples = document.createElement('div');
+        apples.className = 'apples';
+
+        for (let j = 0; j < question.each; j++) {
+            const apple = document.createElement('span');
+            apple.className = 'apple';
+            apple.textContent = '🍎';
+            apples.appendChild(apple);
+        }
+
+        const label = document.createElement('div');
+        label.className = 'group-label';
+        label.textContent = `Kelompok ${i + 1}`;
+
+        group.append(apples, label);
+        groupsEl.appendChild(group);
+    }
+
+    const total = question.groups * question.each;
+
+    $('object-count').textContent = `${total} apel`;
+    $('repeated-addition').textContent =
+        Array(question.groups).fill(question.each).join(' + ') +
+        ` = ${total}`;
+}
+
+function createOptions(correctAnswer) {
+    const candidates = new Set([correctAnswer]);
+
+    while (candidates.size < 4) {
+        const offset = Math.floor(Math.random() * 9) - 4;
+        const value = correctAnswer + offset;
+
+        if (value > 0 && value !== correctAnswer) {
+            candidates.add(value);
+        }
+    }
+
+    return [...candidates].sort(() => Math.random() - 0.5);
+}
+
+function renderQuestion() {
+    answered = false;
+
+    const question = questions[currentQuestion];
+    const answer = question.groups * question.each;
+
+    $('question-number').textContent =
+        `SOAL ${currentQuestion + 1} DARI ${questions.length}`;
+
+    $('question').textContent =
+        `Ada ${question.groups} kelompok apel. Setiap kelompok berisi ${question.each} apel. Berapa jumlah seluruh apel?`;
+
+    $('question-hint').textContent =
+        `Hitung ${question.groups} kelompok, masing-masing berisi ${question.each} apel.`;
+
+    $('feedback').className = 'feedback';$('feedback').textContent = '💡 Pilih jawaban yang menurutmu benar.';
+    $('next-btn').disabled = true;
+
+    const answersEl = $('answers');
+    answersEl.innerHTML = '';
+
+    createOptions(answer).forEach(value => {
+        const button = document.createElement('button');
+        button.className = 'answer-btn';
+        button.textContent = value;
+        button.addEventListener('click', () => checkAnswer(value, button));
+        answersEl.appendChild(button);
+    });
+
+    renderGarden(question);
+    updateProgress();
+}
+
+function checkAnswer(value, selectedButton) {
+    if (answered) return;
+
+    const question = questions[currentQuestion];
+    const correctAnswer = question.groups * question.each;
+    const buttons = [...$('answers').querySelectorAll('button')];
+
+    if (value === correctAnswer) {
+        answered = true;
+        completed++;
+        totalXP += 20;
+        totalStars += 1;
+
+        selectedButton.classList.add('correct');
+
+        buttons.forEach(button => {
+            button.disabled = true;
+
+            if (Number(button.textContent) === correctAnswer) {
+                button.classList.add('correct');
+            }
+        });
+
+        $('feedback').className = 'feedback success';$('feedback').textContent =
+            `🎉 Hebat! ${question.groups} × ${question.each} = ${correctAnswer}. Kamu mendapat +20 XP dan ⭐!`;
+
+        $('next-btn').disabled = false;
+        $('next-btn').textContent =
+            currentQuestion === questions.length - 1
+                ? 'Selesaikan Misi 🏆'
+                : 'Soal Berikutnya →';
+
+        updateStats();
+        saveData(); // Simpan otomatis setiap jawaban benar
+        updateProgress();
+    } else {
+        selectedButton.classList.add('wrong');
+        selectedButton.disabled = true;
+
+        $('feedback').className = 'feedback error';$('feedback').textContent =
+            'Belum tepat. Coba hitung lagi apel pada setiap kelompok, ya!';
+    }
+}
+
+function updateStats() {
+    const xpPerLevel = 100;
+    const level = Math.floor(totalXP / xpPerLevel) + 1;
+    const currentXP = totalXP % xpPerLevel;
+
+    $('level').textContent = level;
+    $('xp-text').textContent = `${currentXP}/${xpPerLevel}`;
+    $('xp-fill').style.width = `${currentXP}%`;
+    $('stars').textContent = totalStars;
+}
+
+function updateProgress() {
+    const percentage = (completed / questions.length) * 100;
+
+    $('progress-fill').style.width = `${percentage}%`;
+    $('progress-text').textContent =
+        `${completed} dari ${questions.length} selesai`;
+}
+
+$('next-btn').addEventListener('click', () => {
+    if (!answered) return;
+
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+    } else {
+        showFinish();
+    }
+});
+
+function showFinish() {
+    $('quiz-content').style.display = 'none';$('finish').style.display = 'block';
+
+    $('finish-text').textContent =
+        `Kamu menyelesaikan ${completed} dari ${questions.length} soal, mengumpulkan ${totalStars} bintang, dan mendapatkan ${totalXP} XP. Terus berlatih agar semakin jago perkalian!`;
+    
+    saveData();
+}
+
+$('restart-btn').addEventListener('click', () => {
+    currentQuestion = 0;
+    completed = 0;
+    answered = false;
+
+    $('quiz-content').style.display = 'block';$('finish').style.display = 'none';
+
+    renderQuestion();
+});
+
+// Event Listener Tombol Navigasi Kembali
+$('exit-btn').addEventListener('click', returnTo3DWorld);$('return-3d-btn').addEventListener('click', returnTo3DWorld);
+
+// Inisialisasi Game
+loadSavedData();
+renderQuestion();
+</script>
+</body>
+</html>
