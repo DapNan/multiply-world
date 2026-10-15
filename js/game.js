@@ -581,9 +581,9 @@ createMissionPortal();
         mixer = new THREE.AnimationMixer(characterModel);
 
         const [idleFBX, walkFBX, jumpFBX] = await Promise.all([
-            loadFBX('./assets/Breathing-idle.fbx'),
-            loadFBX('./assets/Walking.fbx'),
-            loadFBX('./assets/Jump.fbx')
+            loadFBX('./assets/breathing-idle.fbx'),
+            loadFBX('./assets/walking.fbx'),
+            loadFBX('./assets/jump.fbx')
         ]);
 
         if (idleFBX.animations.length) actions.idle = mixer.clipAction(idleFBX.animations[0]);
