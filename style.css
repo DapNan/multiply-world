@@ -1739,3 +1739,69 @@ body:not(.game-started) #mobile-controls {
     border-color: #ffffff;
     transform: scale(1.1);
 }
+/* Container HUD Utama */
+#adventure-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Agar area kosong HUD tidak menghalangi rotasi kamera */
+    z-index: 100;
+}
+
+/* Memastikan elemen UI yang perlu interaksi bisa diklik */
+.hud-profile,
+#score-board,
+#mission-tracker,
+#audio-toggle-btn {
+    pointer-events: auto !important;
+}
+
+/* Papan Skor Bintang (Atas Kanan) */
+#score-board.hud-reward {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Tombol Mute/Unmute Audio (Di sebelah kiri Papan Bintang) */
+#audio-toggle-btn {
+    position: fixed;
+    top: 20px;
+    right: 170px; /* Digeser ke kiri agar berada di samping papan bintang */
+    z-index: 102; /* Ditempatkan di lapisan paling atas */
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+#audio-toggle-btn:hover {
+    background: rgba(30, 41, 59, 0.95);
+    transform: scale(1.08);
+}
+
+#audio-toggle-btn:active {
+    transform: scale(0.95);
+}

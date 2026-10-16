@@ -176,23 +176,30 @@
         Diam (Idle)
     </div>
 
-    <!-- Misi Aktif -->
-    <div id="mission-tracker" class="hud-mission">
-        <div class="hud-mission-heading">
-            <span class="hud-mission-icon">🧭</span>
-            <div>
-                <span class="hud-mission-label">MISI AKTIF</span>
-                <strong id="hud-mission-name">Kebun Perkalian</strong>
-            </div>
-        </div>
-
-        <div class="hud-mission-progress">
-            <span class="hud-mission-pin">📍</span>
-            <span>Menuju lokasi misi</span>
-            <strong><span id="mission-dist">0</span> m</strong>
+  <!-- Misi Aktif -->
+<div id="mission-tracker" class="hud-mission">
+    <div class="hud-mission-heading">
+        <span class="hud-mission-icon">🧭</span>
+        <div>
+            <span class="hud-mission-label">MISI AKTIF</span>
+            <strong id="hud-mission-name">Kebun & Pasar Perkalian</strong>
         </div>
     </div>
 
+    <!-- Status Penyelesaian Misi -->
+    <div id="mission-status-list" style="margin-top: 8px; font-size: 11px; display: flex; flex-direction: column; gap: 4px;">
+        <div id="status-misi-1" style="color: #cbd5e1;">🎯 Misi 1 (Kebun): <span class="misi-badge" style="color: #f59e0b;">Belum Selesai</span></div>
+        <div id="status-misi-2" style="color: #cbd5e1;">🛍️ Misi 2 (Pasar): <span class="misi-badge" style="color: #f59e0b;">Belum Selesai</span></div>
+    </div>
+
+    <div class="hud-mission-progress" style="margin-top: 6px;">
+        <span class="hud-mission-pin">📍</span>
+        <span>Jarak ke Misi terdekat:</span>
+        <strong><span id="mission-dist">0</span> m</strong>
+    </div>
+</div>
+
+<button id="audio-toggle-btn" title="Mute/Unmute Audio">🔊</button>
 </div>
 
 <!-- Modal Kuis Perkalian -->
@@ -291,7 +298,7 @@
     to { transform: rotate(360deg); }
 }
 </style>
-<script type="module" src="./js/world3d.js?v=2"></script>
+<script type="module" src="./js/world3d.js?v=6"></script>
 <script type="module" src="./js/game.js?v=2"></script>
 
 </body>

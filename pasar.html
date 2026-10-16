@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pasar Perkalian | Multiply Adventure</title>
+<style>
+:root{--ink:#24324a;--muted:#65758a;--cream:#fff9ed;--green:#2f9e68;--green2:#18794e;--yellow:#ffd45e;--orange:#ff9860;--pink:#ff7f9f;--blue:#7bd4f4;--line:#e8e7db;--shadow:0 14px 34px #27435a1c}
+*{box-sizing:border-box}body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink);background:#e8f8df}button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #263a63;outline-offset:3px}
+.page{min-height:100vh;background:linear-gradient(#a9e7ff 0 290px,#dff2bd 290px 100%);overflow:hidden;position:relative}
+.page:before,.page:after{content:"";position:absolute;pointer-events:none;border-radius:50%;background:#8fd17b;width:70vw;height:210px;top:245px;left:-20vw}
+.page:after{left:55vw;top:260px;background:#b5e48a;width:70vw}
+header,.wrap{max-width:1180px;margin:auto;position:relative;z-index:1}
+header{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{height:48px;width:48px;border-radius:16px;background:#fff;display:grid;place-items:center;font-size:27px;box-shadow:0 5px 0 #4f9a9a22}
+.brand h1{font-size:20px;margin:0}.brand p{margin:3px 0 0;font-size:11px;letter-spacing:1.4px;font-weight:900;color:#3b7485;text-transform:uppercase}
+.stats{display:flex;gap:8px}.stat-pill{background:#ffffffdf;border:1px solid #ffffff;border-radius:999px;padding:10px 14px;font-weight:900;box-shadow:0 5px 0 #3c778322;white-space:nowrap}
+.wrap{padding:4px 22px 35px}.hero{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:7px 0 20px}.kicker{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#237b53;font-weight:1000}.hero h2{font-size:clamp(32px,5vw,52px);letter-spacing:-1.8px;line-height:1;margin:9px 0}.hero p{max-width:620px;line-height:1.5;color:#426477;font-weight:600;margin:0}.mission-chip{padding:13px 16px;border-radius:17px;background:#fff;border:2px solid #fff;box-shadow:var(--shadow);font-weight:900;white-space:nowrap}
+.scene{position:relative;border:5px solid #fff;border-radius:28px;overflow:hidden;min-height:295px;background:linear-gradient(#b9edff 0 55%,#c8eaa0 55% 100%);box-shadow:var(--shadow)}
+.sun{position:absolute;right:8%;top:26px;width:64px;height:64px;border-radius:50%;background:#ffe16a;box-shadow:0 0 0 12px #ffe16a38}
+.cloud{position:absolute;top:40px;left:13%;width:95px;height:27px;border-radius:30px;background:#fff}.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}.cloud:before{width:38px;height:38px;left:14px;top:-19px}.cloud:after{width:47px;height:47px;right:13px;top:-24px}
+.path{position:absolute;width:68%;height:125px;left:14%;bottom:-70px;background:#f4d69a;border:5px solid #e8c47e;border-radius:50%;transform:rotate(-5deg)}
+.scene-title{position:absolute;top:15px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:1000;letter-spacing:1.5px;color:#477f8a;background:#ffffffb8;border-radius:999px;padding:8px 13px;white-space:nowrap}
+.stalls{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,3vw,28px);max-width:790px;margin:auto;padding:63px 18px 38px}
+.stall{border:0;background:transparent;padding:0;text-align:center;color:var(--ink);min-width:0;transition:transform .18s;filter:drop-shadow(0 7px 0 #527d4318)}.stall:hover,.stall:focus-visible{transform:translateY(-5px)}.stall[aria-pressed="true"] .stall-body{outline:4px solid #ffe16a;outline-offset:2px}
+.roof{height:43px;border:4px solid #fff;border-bottom:0;border-radius:13px 13px 0 0;background:repeating-linear-gradient(90deg,#ff8c75 0 24px,#fff5dd 24px 48px)}
+.stall:nth-child(2) .roof{background:repeating-linear-gradient(90deg,#ffce50 0 24px,#fff5dd 24px 48px)}.stall:nth-child(3) .roof{background:repeating-linear-gradient(90deg,#61c98f 0 24px,#fff5dd 24px 48px)}
+.awning{height:13px;background:#fff;border-radius:0 0 8px 8px;margin-top:-1px;position:relative;z-index:1}
+.stall-body{background:#fff7e7;border:4px solid #fff;border-top:0;border-radius:0 0 12px 12px;padding:9px 5px 11px;min-height:105px}
+.stall-name{display:inline-block;background:#fff;border:2px solid #efdbb0;border-radius:8px;padding:4px 7px;font-size:clamp(9px,1.5vw,12px);font-weight:1000}
+.goods{font-size:clamp(23px,3.6vw,34px);margin:7px 0 3px;white-space:nowrap}.seller{font-size:11px;color:#687887;font-weight:800}
+.select-hint{position:absolute;bottom:9px;left:16px;background:#ffffffd9;border-radius:12px;padding:8px 11px;font-size:12px;font-weight:900;color:#476d70}
+.vendor{position:absolute;right:3%;bottom:17px;font-size:clamp(43px,6vw,65px);filter:drop-shadow(0 4px 0 #517b3a22)}.bubble{position:absolute;right:2%;bottom:91px;background:white;border-radius:14px;padding:10px 12px;font-size:12px;font-weight:900;max-width:175px;box-shadow:var(--shadow)}.bubble:after{content:"";position:absolute;right:23px;bottom:-8px;border-width:9px 8px 0;border-style:solid;border-color:white transparent transparent}
+.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(270px,.72fr);gap:18px;margin-top:20px;align-items:start}
+.card{background:#fffdf7;border:2px solid #fff;border-radius:24px;padding:21px;box-shadow:var(--shadow);min-width:0}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.card h3{font-size:20px;margin:0}.tag{background:#e6f8e9;color:#28794b;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:1000;white-space:nowrap}
+.order-banner{display:flex;align-items:center;gap:12px;background:#fff1c1;border-radius:16px;padding:13px;margin-bottom:16px}.order-icon{height:48px;width:48px;border-radius:14px;background:#fff;display:grid;place-items:center;font-size:26px;flex-shrink:0}.order-banner strong{display:block;font-size:14px}.order-banner span{display:block;color:#8a6b28;font-size:12px;font-weight:800;margin-top:3px}
+.progress-meta{display:flex;justify-content:space-between;color:#71808d;font-size:12px;font-weight:900}.progress{height:9px;background:#e9edef;border-radius:99px;overflow:hidden;margin:8px 0 20px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#4bc981,#a8df5f);transition:width .3s}
+.question-label{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#788795;font-weight:1000}.question{font-size:clamp(22px,3vw,30px);line-height:1.22;margin:8px 0;font-weight:1000;letter-spacing:-.5px}.question-sub{color:#65758a;line-height:1.5;margin:0 0 16px;font-weight:600}
+.math-visual{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;background:#f1f9e9;border:2px dashed #b7dca0;border-radius:17px;padding:14px;margin-bottom:16px}.group{display:flex;align-items:center;justify-content:center;gap:2px;background:#fff;border:1px solid #e2eccf;border-radius:10px;min-height:43px;padding:7px;font-size:22px;box-shadow:0 3px 0 #dbe9c9}.plus{font-size:18px;font-weight:1000;color:#6f9b54}
+.answers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.answer{background:#fff;border:2px solid #dfe8e8;border-radius:14px;padding:13px 6px;font-size:22px;font-weight:1000;color:var(--ink);transition:.15s}.answer:hover:not(:disabled){border-color:#6dcf92;transform:translateY(-2px)}.answer:disabled{cursor:default}.answer.correct{background:#e0f9e8;border-color:#4cbd7b;color:#187344}.answer.wrong{background:#ffe7e8;border-color:#f28e96;color:#a92e40}
+.feedback{min-height:43px;padding-top:12px;font-size:13px;line-height:1.45;font-weight:900;color:#65758a}.feedback.good{color:#21834f}.feedback.bad{color:#bd3949}
+.controls{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:14px;margin-top:4px}.micro{font-size:11px;font-weight:900;color:#7d8993}.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:1000}.btn-main{background:var(--green);color:white;box-shadow:0 4px 0 var(--green2)}.btn-main:disabled{opacity:.45;cursor:not-allowed}.btn-quiet{background:white;border:2px solid #dce8e7;color:var(--ink)}
+.side{display:grid;gap:15px}.coin-box{display:flex;align-items:center;gap:12px;background:#fff0b7;padding:14px;border-radius:16px}.coin{width:48px;height:48px;border-radius:14px;background:white;display:grid;place-items:center;font-size:25px}.coin-box strong{display:block;font-size:25px}.coin-box span{font-size:12px;font-weight:900;color:#8b6d2b}
+.task-list{display:grid;gap:11px;margin-top:17px}.task{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;color:#5f6f7b}.task-icon{width:30px;height:30px;border-radius:10px;background:#eef2e8;display:grid;place-items:center;flex-shrink:0}.task.done .task-icon{background:#d6f5df;color:#247c49}
+.hint{background:#eaf7ff;border-radius:16px;padding:14px;color:#3c6d82;font-size:13px;line-height:1.5;font-weight:700}.hint strong{display:block;color:#245b73;margin-bottom:4px}.side-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.side-actions .btn{flex:1;font-size:12px;padding:10px 8px}
+.footer{text-align:center;color:#4c7b7d;font-size:12px;font-weight:800;padding:20px 0 0}
+.overlay{display:none;position:fixed;inset:0;z-index:5;background:#1d354a99;backdrop-filter:blur(5px);place-items:center;padding:16px}.overlay.show{display:grid}.modal{width:min(460px,100%);background:#fffdf6;border:4px solid white;border-radius:26px;padding:27px;text-align:center;box-shadow:0 25px 70px #14283d55;animation:pop .22s ease-out}@keyframes pop{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}.modal-icon{font-size:58px}.modal h2{font-size:29px;margin:8px 0}.modal p{color:#647486;line-height:1.55}.results{display:flex;gap:10px;margin:17px 0}.result{flex:1;background:#fff1bb;border-radius:14px;padding:12px 7px}.result strong{display:block;font-size:24px}.result span{font-size:10px;font-weight:1000;color:#8b6c2b}.modal-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.toast{position:fixed;top:18px;left:50%;z-index:9;background:#24324a;color:#fff;border-radius:13px;padding:12px 17px;font-weight:900;transform:translate(-50%,-150%);transition:transform .25s;box-shadow:var(--shadow);max-width:90vw;text-align:center}.toast.show{transform:translate(-50%,0)}
+@media(max-width:780px){header{padding:15px}.wrap{padding:4px 14px 28px}.hero{align-items:start;flex-direction:column}.mission-chip{white-space:normal}.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.side .hint-card{grid-column:1/-1}.scene{min-height:270px}.stalls{padding:60px 10px 40px;gap:8px}.stall-body{min-height:96px}.vendor{right:2%;bottom:10px}.bubble{right:2%;bottom:77px}}
+@media(max-width:460px){.brand h1{font-size:17px}.brand p{font-size:9px}.stats{width:100%}.stat-pill{flex:1;text-align:center;font-size:12px;padding:9px 7px}.scene{min-height:235px}.scene-title{font-size:9px}.stalls{padding:55px 6px 37px;gap:5px}.roof{height:34px}.stall-body{padding:7px 2px;min-height:88px}.stall-name{font-size:8px;padding:4px 3px}.goods{font-size:21px;letter-spacing:-1px}.seller{font-size:9px}.select-hint{font-size:9px;left:7px;bottom:6px}.vendor{font-size:43px}.bubble{font-size:10px;max-width:128px;bottom:69px}.card{padding:15px}.side{grid-template-columns:1fr}.side .hint-card{grid-column:auto}.answers{gap:7px}.answer{font-size:19px}.controls{align-items:flex-start;flex-direction:column}.controls .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div class="brand"><div class="logo">🧺</div><div><h1>Multiply Adventure</h1><p>Dunia Virtual Perkalian</p></div></div>
+  <div class="stats"><div class="stat-pill">🛍️ Misi 2: Pasar</div><div class="stat-pill">🪙 <span id="topCoins">0</span> koin</div></div>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <div><div class="kicker">Area perdagangan · Misi 02</div><h2>Pasar Ceria <span>🍎</span></h2><p>Para pedagang mendapat pesanan besar! Pilih kios, hitung barang dalam kelompok yang sama, lalu bantu mereka menyiapkan pesanan dengan tepat.</p></div>
+    <div class="mission-chip">🎯 Selesaikan 5 pesanan</div>
+  </section>
+
+  <section class="scene" aria-label="Pasar ceria dengan kios buah, sayur, dan roti">
+    <div class="sun"></div><div class="cloud"></div><div class="path"></div>
+    <div class="scene-title">PASAR KOTA PETUALANG</div>
+    <div class="stalls">
+      <button class="stall" data-stall="fruit" aria-pressed="true"><div class="roof"></div><div class="awning"></div><div class="stall-body"><span class="stall-name">KIOS BUAH</span><div class="goods">🍎🍐🍊</div><div class="seller">Bu Rani</div></div></button>
+      <button class="stall" data-stall="veggie" aria-pressed="false"><div class="roof"></div><div class="awning"></div><div class="stall-body"><span class="stall-name">KIOS SAYUR</span><div class="goods">🥕🥦🌽</div><div class="seller">Pak Bimo</div></div></button>
+      <button class="stall" data-stall="bakery" aria-pressed="false"><div class="roof"></div><div class="awning"></div><div class="stall-body"><span class="stall-name">TOKO ROTI</span><div class="goods">🥖🥐🍞</div><div class="seller">Kak Sasa</div></div></button>
+    </div>
+    <div class="select-hint">👆 Pilih kios untuk melihat pesanan</div><div class="bubble" id="vendorBubble">Pilih kios, yuk! Ada pesanan yang harus disiapkan.</div><div class="vendor" id="vendorAvatar">👩‍🌾</div>
+  </section>
+
+  <section class="layout">
+    <div class="card">
+      <div class="card-head"><h3 id="orderTitle">📦 Pesanan Bu Rani</h3><span class="tag" id="qCount">PESANAN 1/5</span></div>
+      <div class="order-banner"><div class="order-icon" id="orderIcon">🍎</div><div><strong id="orderSummary">Siapkan apel untuk pelanggan</strong><span id="orderSub">Satu jawaban benar = 10 koin</span></div></div>
+      <div class="progress-meta"><span>Progres pesanan</span><span id="progressText">0 dari 5 selesai</span></div><div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="question-label">Tantangan perkalian</div><div class="question" id="question">Ada 3 keranjang apel. Setiap keranjang berisi 4 apel.</div><p class="question-sub" id="questionSub">Berapa jumlah seluruh apel yang harus disiapkan?</p>
+      <div class="math-visual" id="mathVisual" aria-label="Ilustrasi kelompok barang"></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback" aria-live="polite">Hitung setiap kelompok, lalu pilih jawabanmu.</div>
+      <div class="controls"><span class="micro" id="learningHint">💡 Petunjuk: jumlah kelompok × isi setiap kelompok.</span><button class="btn btn-main" id="nextBtn" disabled>Periksa jawaban dulu</button></div>
+    </div>
+    <aside class="side">
+      <div class="card">
+        <div class="card-head"><h3>🎒 Keranjangmu</h3></div>
+        <div class="coin-box"><div class="coin">🪙</div><div><strong id="coinCount">0</strong><span>Koin terkumpul</span></div></div>
+        <div class="task-list">
+          <div class="task" id="taskObserve"><div class="task-icon">👀</div><span>Amati kelompok barang</span></div>
+          <div class="task" id="taskMultiply"><div class="task-icon">✖️</div><span>Gunakan perkalian</span></div>
+          <div class="task" id="taskFinish"><div class="task-icon">🏆</div><span>Selesaikan semua pesanan</span></div>
+        </div>
+      </div>
+      <div class="card hint-card">
+        <div class="card-head"><h3>🧠 Cara berpikir</h3></div>
+        <div class="hint"><strong>Kelompok sama banyak</strong>Perkalian adalah penjumlahan berulang. Contoh: 3 keranjang berisi 4 apel berarti 4 + 4 + 4 = 12 apel.</div>
+        <div class="side-actions"><button class="btn btn-quiet" id="hintBtn">Tampilkan petunjuk</button><button class="btn btn-quiet" id="restartBtn">Ulangi misi ↻</button></div>
+      </div>
+    </aside>
+  </section>
+  <div class="footer">🌱 Hitung dengan teliti · Bantu pedagang · Kumpulkan koin · Jadilah jagoan perkalian!</div>
+</main>
+</div>
+
+<div class="overlay" id="resultOverlay" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+  <div class="modal"><div class="modal-icon" id="resultIcon">🏆</div><h2 id="resultTitle">Misi selesai!</h2><p id="resultMessage"></p><div class="results"><div class="result"><strong id="resultCorrect">0/5</strong><span>PESANAN BENAR</span></div><div class="result"><strong id="resultCoins">0</strong><span>KOIN DIDAPAT</span></div></div><div class="modal-buttons"><button class="btn btn-main" id="playAgain">Main lagi ↻</button><button class="btn btn-quiet" id="backTown">Kembali ke kota</button></div></div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const stalls = {
+    fruit:{name:"Bu Rani",title:"Pesanan Bu Rani",icon:"🍎",avatar:"👩‍🌾",bubble:"Bantu aku mengemas buah untuk pelanggan, ya!",summary:"Siapkan buah untuk pelanggan",items:[
+      {a:3,b:4,item:"🍎",thing:"apel",story:"Bu Rani menyiapkan 3 keranjang apel. Setiap keranjang berisi 4 apel.",ask:"Berapa apel yang harus disiapkan seluruhnya?"},
+      {a:2,b:5,item:"🍐",thing:"pir",story:"Ada 2 kantong pir. Setiap kantong berisi 5 pir.",ask:"Berapa jumlah seluruh pir?"},
+      {a:4,b:3,item:"🍊",thing:"jeruk",story:"Pelanggan memesan 4 kotak jeruk. Setiap kotak berisi 3 jeruk.",ask:"Berapa jeruk yang perlu dikemas?"},
+      {a:5,b:2,item:"🍎",thing:"apel",story:"Ada 5 piring apel potong. Setiap piring berisi 2 potong.",ask:"Berapa potong apel semuanya?"},
+      {a:3,b:5,item:"🍇",thing:"anggur",story:"Bu Rani punya 3 keranjang anggur. Setiap keranjang berisi 5 tandan kecil.",ask:"Berapa tandan kecil yang ada?"}
+    ]},
+    veggie:{name:"Pak Bimo",title:"Pesanan Pak Bimo",icon:"🥕",avatar:"👨‍🌾",bubble:"Sayur harus dihitung tepat supaya pesanan tidak kurang!",summary:"Hitung sayur untuk pesanan",items:[
+      {a:2,b:4,item:"🥕",thing:"wortel",story:"Pak Bimo menyiapkan 2 ikat wortel. Setiap ikat berisi 4 wortel.",ask:"Berapa jumlah seluruh wortel?"},
+      {a:3,b:3,item:"🌽",thing:"jagung",story:"Ada 3 keranjang jagung. Setiap keranjang berisi 3 jagung.",ask:"Berapa jagung yang tersedia?"},
+      {a:4,b:2,item:"🥦",thing:"brokoli",story:"Pelanggan membeli 4 kantong brokoli. Tiap kantong berisi 2 brokoli.",ask:"Berapa brokoli yang dibeli?"},
+      {a:5,b:3,item:"🥕",thing:"wortel",story:"Ada 5 ikat wortel. Setiap ikat berisi 3 wortel.",ask:"Berapa wortel seluruhnya?"},
+      {a:2,b:5,item:"🌽",thing:"jagung",story:"Pak Bimo mengisi 2 keranjang. Tiap keranjang berisi 5 jagung.",ask:"Berapa jagung yang harus disiapkan?"}
+    ]},
+    bakery:{name:"Kak Sasa",title:"Pesanan Kak Sasa",icon:"🥐",avatar:"👩‍🍳",bubble:"Roti harus dibagi rata ke setiap nampan. Bantu aku!",summary:"Siapkan roti untuk pelanggan",items:[
+      {a:3,b:2,item:"🥐",thing:"croissant",story:"Kak Sasa menyiapkan 3 nampan. Setiap nampan berisi 2 croissant.",ask:"Berapa croissant semuanya?"},
+      {a:2,b:5,item:"🍞",thing:"roti",story:"Ada 2 rak roti. Setiap rak berisi 5 roti.",ask:"Berapa roti di kedua rak?"},
+      {a:4,b:3,item:"🥖",thing:"baguette",story:"Pelanggan memesan 4 kantong. Setiap kantong berisi 3 baguette mini.",ask:"Berapa baguette mini yang dibutuhkan?"},
+      {a:5,b:2,item:"🥐",thing:"croissant",story:"Ada 5 piring. Setiap piring berisi 2 croissant.",ask:"Berapa croissant yang disajikan?"},
+      {a:3,b:5,item:"🍞",thing:"roti",story:"Kak Sasa mengisi 3 kotak dengan masing-masing 5 roti.",ask:"Berapa roti yang harus dimasukkan?"}
+    ]}
+  };
+  let currentStall="fruit", orderIndex=0, coins=0, correct=0, answered=false, earned=0, currentOrder=null, toastTimer;
+  const shuffle = a => a.map(v=>({v,sort:Math.random()})).sort((x,y)=>x.sort-y.sort).map(x=>x.v);
+  function startStall(key){
+    currentStall=key;orderIndex=0;correct=0;earned=0;answered=false;
+    $("resultOverlay").classList.remove("show");
+    document.querySelectorAll(".stall").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.stall===key)));
+    const s=stalls[key];$("orderTitle").textContent="📦 "+s.title;$("orderIcon").textContent=s.icon;$("vendorAvatar").textContent=s.avatar;$("vendorBubble").textContent=s.bubble;$("orderSummary").textContent=s.summary;
+    renderOrder();updateCoins();
+  }
+  function renderOrder(){
+    const s=stalls[currentStall];currentOrder=s.items[orderIndex];answered=false;
+    $("qCount").textContent=`PESANAN ${orderIndex+1}/5`;
+    $("progressText").textContent=`${orderIndex} dari 5 selesai`;
+    $("progressFill").style.width=`${orderIndex/5*100}%`;
+    $("question").textContent=currentOrder.story;$("questionSub").textContent=currentOrder.ask;
+    const q=currentOrder;
+    $("mathVisual").innerHTML=Array.from({length:q.a},()=>`<div class="group" aria-label="${q.b} ${q.thing}">${q.item.repeat(q.b)}</div>`).join('<span class="plus">+</span>');
+    const answer=q.a*q.b;let choices=new Set([answer,Math.max(1,answer-2),answer+3]);let n=answer+4;while(choices.size<3)choices.add(n++);
+    $("answers").innerHTML=shuffle([...choices]).map(v=>`<button class="answer" data-value="${v}">${v}</button>`).join("");
+    $("answers").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>checkAnswer(Number(b.dataset.value),b)));
+    $("feedback").className="feedback";$("feedback").textContent="Hitung setiap kelompok, lalu pilih jawabanmu.";
+    $("nextBtn").disabled=true;$("nextBtn").textContent="Periksa jawaban dulu";
+    $("learningHint").textContent="💡 Jumlah kelompok × isi setiap kelompok";
+    updateTasks();
+  }
+  function checkAnswer(value,button){
+    if(answered)return;answered=true;const q=currentOrder,answer=q.a*q.b;
+    $("answers").querySelectorAll("button").forEach(b=>b.disabled=true);
+    if(value===answer){
+      button.classList.add("correct");correct++;coins+=10;earned+=10;
+      $("feedback").className="feedback good";$("feedback").textContent=`Tepat! ${q.a} × ${q.b} = ${answer}. Pesanan siap dikirim! +10 koin 🪙`;
+      $("vendorBubble").textContent="Pesanan tepat! Terima kasih, petualang!";
+    }else{
+      button.classList.add("wrong");$("answers").querySelectorAll("button").forEach(b=>{if(Number(b.dataset.value)===answer)b.classList.add("correct")});
+      $("feedback").className="feedback bad";$("feedback").textContent=`Belum tepat. Ada ${q.a} kelompok, masing-masing ${q.b}. Jadi ${q.b} dijumlahkan ${q.a} kali = ${answer}.`;
+      $("vendorBubble").textContent="Ayo perhatikan kelompoknya. Kamu pasti bisa!";
+    }
+    $("progressText").textContent=`${orderIndex+1} dari 5 selesai`;$("progressFill").style.width=`${(orderIndex+1)/5*100}%`;
+    $("nextBtn").disabled=false;$("nextBtn").textContent=orderIndex===4?"Lihat hasil misi 🏆":"Pesanan berikutnya →";
+    updateCoins();updateTasks();
+  }
+  function updateCoins(){$("topCoins").textContent=coins;$("coinCount").textContent=coins}
+  function updateTasks(){
+    $("taskObserve").classList.toggle("done",answered||orderIndex>0);
+    $("taskMultiply").classList.toggle("done",correct>0);
+    $("taskFinish").classList.toggle("done",orderIndex===4&&answered);
+  }
+function finish() {
+    $("resultCorrect").textContent = `${correct}/5`;
+    $("resultCoins").textContent = earned;
+    $("resultIcon").textContent = correct === 5 ? "🏆" : correct >= 3 ? "🎉" : "🌱";
+    $("resultTitle").textContent = correct === 5 ? "Pedagang terbaik!" : "Misi pasar selesai!";
+    $("resultMessage").textContent = correct === 5 
+      ? "Semua pesanan kamu hitung dengan tepat. Para pedagang memberimu lencana Jagoan Pasar!" 
+      : `Kamu menyelesaikan 5 pesanan dan menjawab ${correct} dengan benar.`;
+    
+    // SIMPAN PROGRES KE LOCALSTORAGE
+    const prevStars = parseInt(localStorage.getItem('multiply_stars') || '0', 10);
+    const prevXP = parseInt(localStorage.getItem('multiply_xp') || '0', 10);
+    
+    // Tambahkan bintang (koin) dan XP
+    localStorage.setItem('multiply_stars', prevStars + earned);
+    localStorage.setItem('multiply_xp', prevXP + (earned * 2));
+
+    // TAMBAHKAN BARIS INI: Tandai bahwa Misi 2 sudah selesai
+    localStorage.setItem('misi2_completed', 'true');
+    
+    $("resultOverlay").classList.add("show");
+    $("playAgain").focus();
+}
+
+  // NAVIGASI KEMBALI KE GAME UTAMA (index.html)
+  $("backTown").addEventListener("click", () => {
+    $("resultOverlay").classList.remove("show");
+    localStorage.setItem('multiply_from_mission', 'true'); // Flag untuk posisi kembali
+    window.location.href = 'index.html';
+  });
+  $("nextBtn").addEventListener("click",()=>{if(!answered)return;if(orderIndex<4){orderIndex++;renderOrder()}else finish()});
+  document.querySelectorAll(".stall").forEach(b=>b.addEventListener("click",()=>startStall(b.dataset.stall)));
+  $("hintBtn").addEventListener("click",()=>{const q=currentOrder;showToast(`Petunjuk: hitung ${q.b} ${q.thing} sebanyak ${q.a} kelompok. Coba tulis ${Array(q.a).fill(q.b).join(" + ")}.`)});
+  $("restartBtn").addEventListener("click",()=>startStall(currentStall));
+  $("playAgain").addEventListener("click",()=>startStall(currentStall));
+  $("backTown").addEventListener("click",()=>{ $("resultOverlay").classList.remove("show");showToast("Tombol ini siap dihubungkan ke peta utama Multiply Adventure.");});
+  $("resultOverlay").addEventListener("click",e=>{if(e.target===$("resultOverlay"))$("resultOverlay").classList.remove("show")});
+  function showToast(text){$("toast").textContent=text;$("toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").classList.remove("show"),3300)}
+  startStall("fruit");
+})();
+</script>
+</body>
+</html>

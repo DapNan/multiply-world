@@ -25,6 +25,7 @@ const hudMissionNameEl = document.getElementById('hud-mission-name');
 // CEK SANGAT AWAL: Sembunyikan landing screen & ubah teks transisi jika kembali dari perkalian.html
 // CEK SANGAT AWAL: Set teks & aktifkan overlay sebelum HTML selesai di-render
 // CEK SANGAT AWAL: Sembunyikan landing screen, banner paman sam, dan petunjuk jika kembali dari perkalian.html
+// CEK SANGAT AWAL: Sembunyikan landing screen & ubah teks transisi sesuai misi yang dikunjungi
 if (localStorage.getItem('multiply_from_mission') === 'true') {
     if (landingScreen) {
         landingScreen.style.display = 'none';
@@ -44,7 +45,9 @@ if (localStorage.getItem('multiply_from_mission') === 'true') {
     if (transitionOverlay) {
         const transitionText = transitionOverlay.querySelector('h3') || document.getElementById('transition-title');
         if (transitionText) {
-            transitionText.textContent = 'Kembali dari Kebun Perkalian... 🌾';
+            // Dapatkan nama lokasi misi terakhir (default ke Kebun jika tidak ada)
+            const missionName = localStorage.getItem('last_visited_mission_name') || 'Kebun Perkalian... 🌾';
+            transitionText.textContent = 'Kembali dari ' + missionName;
         }
         transitionOverlay.classList.add('active');
     }
@@ -105,11 +108,41 @@ function updateAdventureXP(totalXP) {
     if (xpTextEl) xpTextEl.textContent = `${currentXP} / ${xpPerLevel} XP`;
     if (xpBarFillEl) xpBarFillEl.style.width = `${progress}%`;
 }
+function checkCompletedMissions() {
+    const multiplyStars = parseInt(localStorage.getItem('multiply_stars') || '0', 10);
+    
+    // Cek flag atau jika pemain sudah punya akumulasi bintang/koin
+    const m1Done = localStorage.getItem('misi1_completed') === 'true' || multiplyStars >= 5;
+    const m2Done = localStorage.getItem('misi2_completed') === 'true' || multiplyStars >= 10;
+
+    const elM1 = document.getElementById('status-misi-1');
+    const elM2 = document.getElementById('status-misi-2');
+
+    if (elM1) {
+        const badge1 = elM1.querySelector('.misi-badge');
+        if (m1Done && badge1) {
+            badge1.textContent = '✅ Selesai!';
+            badge1.style.color = '#22c55e';
+        }
+    }
+
+    if (elM2) {
+        const badge2 = elM2.querySelector('.misi-badge');
+        if (m2Done && badge2) {
+            badge2.textContent = '✅ Selesai!';
+            badge2.style.color = '#22c55e';
+        }
+    }
+
+    if (m1Done && m2Done && hudMissionNameEl) {
+        hudMissionNameEl.textContent = '🎉 Semua Misi Selesai!';
+    }
+}
 function loadSavedProgressAndPosition() {
     const isFromMission = localStorage.getItem('multiply_from_mission') === 'true';
 
     if (isFromMission) {
-        // HANYA AMBIL SIMPANAN JIKA KEMBALI DARI MISI
+        // === JIKA KEMBALI DARI MISI: MUAT PROGRES & STATUS ===
         const savedStars = localStorage.getItem('multiply_stars');
         const savedXP = localStorage.getItem('multiply_xp');
 
@@ -123,6 +156,7 @@ function loadSavedProgressAndPosition() {
             updateAdventureXP(playerXP);
         }
 
+        // Ambil posisi koordinat terakhir sebelum masuk portal
         const savedX = localStorage.getItem('multiply_player_x');
         const savedY = localStorage.getItem('multiply_player_y');
         const savedZ = localStorage.getItem('multiply_player_z');
@@ -131,11 +165,16 @@ function loadSavedProgressAndPosition() {
             player.position.set(parseFloat(savedX), parseFloat(savedY), parseFloat(savedZ));
             isReturningFromMission = true;
         }
-removeDroppedApples();
-        // Hapus flag penanda
+
+        removeDroppedApples();
+        // Hapus flag transisi setelah berhasil dimuat
         localStorage.removeItem('multiply_from_mission');
+
+        // Update indikator status misi yang sudah selesai
+        checkCompletedMissions();
+
     } else {
-        // JIKA DI-REFRESH/BARU MULAI: RESET TOTAL DARI 0 & HAPUS LOCALSTORAGE
+        // === JIKA DI-REFRESH / DIBUKA BARU: RESET TOTAL DARI 0 ===
         playerScore = 0;
         playerXP = 0;
         if (scoreValEl) scoreValEl.textContent = 0;
@@ -143,14 +182,24 @@ removeDroppedApples();
 
         player.position.set(0, 0.1, 15);
 
+        // Hapus semua data simpanan agar ulang dari awal
         localStorage.removeItem('multiply_stars');
         localStorage.removeItem('multiply_xp');
         localStorage.removeItem('multiply_player_x');
         localStorage.removeItem('multiply_player_y');
         localStorage.removeItem('multiply_player_z');
         localStorage.removeItem('multiply_from_mission');
-        
+        localStorage.removeItem('misi1_completed');
+        localStorage.removeItem('misi2_completed');
+
         isReturningFromMission = false;
+
+        // Reset tampilan badge di HUD ke "Belum Selesai"
+        const badge1 = document.querySelector('#status-misi-1 .misi-badge');
+        const badge2 = document.querySelector('#status-misi-2 .misi-badge');
+        if (badge1) { badge1.textContent = 'Belum Selesai'; badge1.style.color = '#f59e0b'; }
+        if (badge2) { badge2.textContent = 'Belum Selesai'; badge2.style.color = '#f59e0b'; }
+        if (hudMissionNameEl) hudMissionNameEl.textContent = 'Kebun & Pasar Perkalian';
     }
 }
 
@@ -246,21 +295,19 @@ function createPillarSign() {
 createPillarSign();
 
 
-
-// --- NAVIGASI LANGSUNG KE PERKALIAN.HTML DENGAN TRANSISI MULUS ---
+// Navigasi ke Kebun (Misi 1)
 function openMission1() {
     if (isQuizActive) return;
     isQuizActive = true;
 
-    // Simpan koordinat lokasi pemain (Mundur 5m dari pilar)
     localStorage.setItem('multiply_player_x', player.position.x);
     localStorage.setItem('multiply_player_y', player.position.y);
     localStorage.setItem('multiply_player_z', player.position.z - 5);
-
-    // Tandai bahwa pemain pindah ke perkalian.html
     localStorage.setItem('multiply_from_mission', 'true');
+    
+    // TAMBAHKAN BARIS INI: Simpan nama misi yang dikunjungi
+    localStorage.setItem('last_visited_mission_name', 'Kebun Perkalian... 🌾');
 
-    // Ubah teks overlay saat masuk misi
     const overlay = document.getElementById('world-transition-overlay');
     if (overlay) {
         const transitionText = overlay.querySelector('h3') || document.getElementById('transition-title');
@@ -273,6 +320,98 @@ function openMission1() {
     setTimeout(() => {
         window.location.href = 'perkalian.html';
     }, 600);
+}
+
+// Navigasi ke Pasar (Misi 2)
+function openMission2() {
+    if (isQuizActive) return;
+    isQuizActive = true;
+
+    localStorage.setItem('multiply_player_x', player.position.x);
+    localStorage.setItem('multiply_player_y', player.position.y);
+    localStorage.setItem('multiply_player_z', player.position.z - 5);
+    localStorage.setItem('multiply_from_mission', 'true');
+
+    // TAMBAHKAN BARIS INI: Simpan nama misi yang dikunjungi
+    localStorage.setItem('last_visited_mission_name', 'Pasar Perkalian... 🛍️');
+
+    const overlay = document.getElementById('world-transition-overlay');
+    if (overlay) {
+        const transitionText = overlay.querySelector('h3') || document.getElementById('transition-title');
+        if (transitionText) {
+            transitionText.textContent = 'Memasuki Pasar Perkalian... 🍎';
+        }
+        overlay.classList.add('active');
+    }
+
+    setTimeout(() => {
+        window.location.href = 'pasar.html';
+    }, 600);
+}
+
+// =========================================================
+// DEKLARASI DEPO PORTAL MISI 2 (PASAR PERKALIAN)
+// =========================================================
+const mission2Group = new THREE.Group();
+mission2Group.position.set(-96.8, -0.6, 111.9); // Berada di sebelah kanan Misi 1
+world.scene.add(mission2Group);
+
+function createMission2Portal() {
+    gltfLoader.load('./assets/portal.glb', (gltf) => {
+        const portal2Model = gltf.scene.clone();
+        portal2Model.scale.setScalar(1.5);
+        portal2Model.position.set(0, 0.5, 0);
+
+        portal2Model.traverse((child) => {
+            if (child.isMesh && child.material) {
+                child.material.side = THREE.DoubleSide;
+            }
+        });
+
+        // Cahaya neon oranye/kuning untuk Misi Pasar
+        const portalLight = new THREE.PointLight(0xf59e0b, 8, 15);
+        portalLight.position.set(0, 3, 0);
+        portal2Model.add(portalLight);
+
+        mission2Group.add(portal2Model);
+    }, undefined, () => {
+        // Fallback Pilar Oranye
+        const fallbackGeo = new THREE.CylinderGeometry(1.5, 1.5, 8, 16);
+        const fallbackMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.6, wireframe: true });
+        const fallbackMesh = new THREE.Mesh(fallbackGeo, fallbackMat);
+        fallbackMesh.position.y = 4;
+        mission2Group.add(fallbackMesh);
+    });
+
+    createPillar2Sign();
+}
+
+function createPillar2Sign() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 80;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#d97706'; // Warna Oranye Pasar
+    ctx.beginPath();
+    ctx.roundRect(20, 10, 216, 60, 30);
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#f59e0b';
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('MISI 2 🛍️', 128, 50);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const spriteMat = new THREE.SpriteMaterial({ map: texture });
+    const sprite = new THREE.Sprite(spriteMat);
+    sprite.scale.set(5, 1.8, 1);
+    sprite.position.set(0, 8, 0);
+
+    mission2Group.add(sprite);
 }
 
 // ========================================
@@ -329,7 +468,10 @@ function loadAnimatedBirds() {
             bird.scale.setScalar(route.scale);
 
             world.scene.add(bird);
-
+// Tempelkan & putar audio burung pada burung pertama
+            if (index === 0 && audio && typeof audio.attachBirdAudio === 'function') {
+                audio.attachBirdAudio(bird);
+            }
             // Mixer Animasi Kepakan Sayap
             let birdMixer = null;
             if (animations && animations.length > 0) {
@@ -546,11 +688,20 @@ function startGameDirectly() {
         }
     }
 
-    audio.startBGM();
+    if (audio && typeof audio.startBGM === 'function') {
+        audio.startBGM();
+    }
 }
 
 async function initWorldAssets() {
     try {
+        // Menempelkan camera ke audio listener agar spatial audio berfungsi
+        if (audio && typeof audio.init === 'function') {
+            audio.init(world.camera);
+        } else if (audio && audio.listener) {
+            world.camera.add(audio.listener);
+        }
+
         await new Promise((resolve, reject) => {
             gltfLoader.load('./assets/map.glb', (gltf) => {
                 mapModel = gltf.scene;
@@ -570,6 +721,7 @@ async function initWorldAssets() {
 
 loadAnimatedBirds();
 createMissionPortal();
+createMission2Portal();
         characterModel = await loadFBX('./assets/character.fbx');
         characterModel.scale.setScalar(0.03);
         prepareMaterials(characterModel);
@@ -581,7 +733,7 @@ createMissionPortal();
         mixer = new THREE.AnimationMixer(characterModel);
 
         const [idleFBX, walkFBX, jumpFBX] = await Promise.all([
-            loadFBX('./assets/breathing-idle.fbx'),
+            loadFBX('./assets/idle.fbx'),
             loadFBX('./assets/walking.fbx'),
             loadFBX('./assets/jump.fbx')
         ]);
@@ -851,37 +1003,65 @@ function updatePlayer(dt) {
 
     if (isJumping) {
         updateHUDStatus('Melompat!');
-        audio.stopFootsteps();
+        if (audio && typeof audio.stopFootsteps === 'function') audio.stopFootsteps();
     } else if (isMoving) {
         playAnimation('walk');
         if (actions.walk) actions.walk.setEffectiveTimeScale(isRunning ? 1.6 : 1.1);
         updateHUDStatus(isRunning ? 'Berlari' : 'Berjalan');
-        audio.startFootsteps(isRunning ? 10 : 5);
+        if (audio && typeof audio.startFootsteps === 'function') audio.startFootsteps(isRunning ? 10 : 5);
     } else {
         playAnimation('idle');
         updateHUDStatus('Diam (Idle)');
-        audio.stopFootsteps();
+        if (audio && typeof audio.stopFootsteps === 'function') audio.stopFootsteps();
     }
 
     // PEMICU MISI 1 -> DENGAN TRANSISI HALUS
    // Pemicu Misi 1 saat mendekati pilar
   // PEMICU MISI 1 -> DENGAN TRANSISI HALUS
-    if (typeof missionGroup !== 'undefined') {
-        // Rotasi portal jika model sudah selesai dimuat
-        // if (portalModel) {
-        //     portalModel.rotation.y += dt * 1.5; // Portal berputar halus
-        // }
+    // PEMICU DAN INDIKATOR JARAK MISI
+if (typeof missionGroup !== 'undefined' && typeof mission2Group !== 'undefined') {
+    const distM1 = player.position.distanceTo(missionGroup.position);
+    const distM2 = player.position.distanceTo(mission2Group.position);
 
-        const distanceToMission = player.position.distanceTo(missionGroup.position);
+    // Cek status penyelesaian dari localStorage
+    const m1Done = localStorage.getItem('misi1_completed') === 'true';
+    const m2Done = localStorage.getItem('misi2_completed') === 'true';
 
-        if (missionDistEl) {
-            missionDistEl.textContent = Math.round(distanceToMission);
-        }
+    // 1. Tentukan Misi mana yang sedang aktif untuk indikator jarak
+    let targetDist = distM1;
+    let activeMissionName = 'Kebun Perkalian';
 
-        if (distanceToMission < 3.5 && !isQuizActive) {
-            openMission1(); 
-        }
+    if (!m1Done) {
+        // Misi 1 belum selesai -> Target jarak ke Misi 1
+        targetDist = distM1;
+        activeMissionName = 'Kebun Perkalian';
+    } else if (!m2Done) {
+        // Misi 1 sudah selesai, Misi 2 belum -> Target jarak otomatis pindah ke Misi 2
+        targetDist = distM2;
+        activeMissionName = 'Pasar Perkalian';
+    } else {
+        // Kedua Misi sudah selesai -> Ambil jarak ke portal terdekat
+        targetDist = Math.min(distM1, distM2);
+        activeMissionName = 'Semua Misi Selesai 🎉';
     }
+
+    // Update Teks Nama Misi & Jarak di HUD
+    if (hudMissionNameEl) {
+        hudMissionNameEl.textContent = activeMissionName;
+    }
+    if (missionDistEl) {
+        missionDistEl.textContent = Math.round(targetDist);
+    }
+
+    // 2. Pemicu otomatis saat mendekati portal (< 3.5 meter)
+    if (distM1 < 3.5 && !isQuizActive) {
+        openMission1(); 
+    }
+    if (distM2 < 3.5 && !isQuizActive) {
+        openMission2();
+    }
+}
+
 }
 
 // Camera Breathing Effect
@@ -964,4 +1144,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // =========================================================
+// KONTROL TOMBOL MUTE / UNMUTE AUDIO HUD
+// =========================================================
+// Kontrol Tombol Mute / Unmute Audio HUD
+const audioToggleBtn = document.getElementById('audio-toggle-btn');
+if (audioToggleBtn) {
+    audioToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // Mencegah klik tembus ke kontrol kamera 3D
+
+        if (audio && typeof audio.toggleMute === 'function') {
+            const isMuted = audio.toggleMute();
+            audioToggleBtn.textContent = isMuted ? '🔇' : '🔊';
+        }
+    });
+}
 });

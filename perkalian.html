@@ -66,10 +66,7 @@
                 </div>
             </div>
 
-            <div class="explanation">
-                <div class="explanation-title">PERKALIAN = PENJUMLAHAN BERULANG</div>
-                <div class="repeated" id="repeated-addition">4 + 4 + 4 = 12</div>
-            </div>
+          
         </section>
 
         <!-- AREA KUIS -->
@@ -334,13 +331,15 @@ $('next-btn').addEventListener('click', () => {
         showFinish();
     }
 });
-
 function showFinish() {
     $('quiz-content').style.display = 'none';$('finish').style.display = 'block';
 
     $('finish-text').textContent =
         `Kamu menyelesaikan ${completed} dari ${questions.length} soal, mengumpulkan ${totalStars} bintang, dan mendapatkan ${totalXP} XP. Terus berlatih agar semakin jago perkalian!`;
     
+    // TAMBAHKAN BARIS INI: Tandai bahwa Misi 1 sudah selesai
+    localStorage.setItem('misi1_completed', 'true');
+
     saveData();
 }
 
