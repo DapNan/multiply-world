@@ -1,305 +1,249 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Multiply Adventure 3D</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0759c7">
+  <title>DUVIKA — Dunia Virtual Perkalian</title>
+  <link rel="stylesheet" href="prototype_landing/stylelandingpage.css">
 </head>
+
 <body>
-    <div id="game-container"></div>
-<!-- ```html -->
-<!-- Landing Screen -->
-<div id="landing-screen">
-    <div class="landing-content">
+  <div class="top-glow"></div>
+  <header class="site-header">
+    <a class="brand" href="#beranda" aria-label="DUVIKA beranda">
+      <span class="brand-mark">✦</span>
+      <span class="brand-name">DUVIKA<small>DUNIA VIRTUAL PERKALIAN</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a class="active" href="#beranda">Beranda</a>
+      <a href="#fitur-unggulan">Fitur Unggulan</a>
+      <!-- <a href="#petualangan">Petualangan</a> -->
+      <a href="#implementasi">Implementasi & Manfaat</a>
+      <a href="#cara-bermain">Cara Bermain</a>
+      <a href="#tentang">Tentang</a>
+    </nav>
+    <a href="landing.html">
+      <button class="header-cta" id="headerStart">Mulai Belajar <span>↗</span></button>
+    </a>
+  </header>
 
-        <header class="landing-header">
-            <div class="landing-brand">
-                <span class="brand-icon">✦</span>
-                <span>MULTIPLY ADVENTURE</span>
+  <main>
+    <section class="hero section-wrap" id="beranda">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> PETUALANGAN BELAJAR DIMULAI!</div>
+        <h1>Belajar perkalian,<br><span>jadi petualangan.</span></h1>
+        <p class="hero-text">Masuki dunia DUVIKA, jelajahi tempat-tempat seru, bantu para warga, dan selesaikan
+          tantangan perkalian sambil mengumpulkan bintang!</p>
+        <div class="hero-actions">
+          <a href="landing.html">
+
+            <button class="primary-btn">🚀 Mulai Petualangan <span>→</span></button>
+
+          </a>
+          <a class="secondary-btn" href="#petualangan">Lihat Misi <span>↓</span></a>
+        </div>
+        <div class="hero-proof">
+          <div class="avatar-stack"><span>🧑🏻‍🚀</span><span>🧑🏽‍🌾</span><span>🧒🏻</span></div>
+          <div><strong>Belajar sambil bermain</strong><small>Jelajahi · Pecahkan · Raih bintang</small></div>
+        </div>
+      </div>
+      <div class="hero-art logo-art" aria-label="Logo DUVIKA Dunia Virtual Perkalian">
+        <img src="prototype_landing/logo-duvika.png" alt="Logo DUVIKA — Dunia Virtual Perkalian">
+      </div>
+      <div class="hero-bottom-note"><span>✦</span> JELAJAHI <b>·</b> SELESAIKAN MISI <b>·</b> KUMPULKAN BINTANG
+        <span>✦</span></div>
+    </section>
+
+    <section class="features section-wrap" id="fitur-unggulan" aria-label="Fitur unggulan DUVIKA">
+      <div class="features-heading"><span class="section-kicker">✦ FITUR UNGGULAN</span>
+        <h2>Belajar jadi <span>lebih seru!</span></h2>
+        <p>DUVIKA menggabungkan petualangan, tantangan, dan pengalaman belajar dalam satu dunia interaktif.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card"><span class="feature-icon feature-blue">🗺️</span>
+          <h3>Dunia Virtual</h3>
+          <p>Jelajahi area belajar dengan suasana petualangan yang menyenangkan.</p>
+        </article>
+        <article class="feature-card"><span class="feature-icon feature-green">🧩</span>
+          <h3>Misi Kontekstual</h3>
+          <p>Latihan perkalian dikaitkan dengan kegiatan sehari-hari di kebun dan pasar.</p>
+        </article>
+        <article class="feature-card"><span class="feature-icon feature-yellow">✖️</span>
+          <h3>Kuis Interaktif</h3>
+          <p>Pilih jawaban, dapatkan umpan balik, dan coba lagi untuk belajar.</p>
+        </article>
+        <article class="feature-card"><span class="feature-icon feature-purple">🏆</span>
+          <h3>Progres Belajar</h3>
+          <p>Kumpulkan bintang dan buka misi berikutnya setelah menyelesaikan tantangan.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="missions section-wrap" id="petualangan">
+      <div class="section-heading">
+        <div><span class="section-kicker">PETA PETUALANGAN</span>
+          <h2>Pilih misimu, <span>Penjelajah!</span></h2>
+          <p>Setiap tempat punya tantangan yang berbeda. Selesaikan misi untuk membuka petualangan berikutnya.</p>
+        </div>
+        <div class="map-stamp">DUVIKA<br><small>WORLD MAP</small></div>
+      </div>
+      <div class="mission-grid">
+        <article class="mission-card garden-card">
+          <div class="mission-art mission-photo-art garden-art">
+            <div class="photo-fallback garden-fallback"><span>🍎</span><strong>KEBUN APEL</strong><small>Ganti dengan
+                foto Kebun Apel milikmu</small></div><img class="mission-photo" src="prototype_landing/apel.jpg"
+              alt="Foto area Kebun Apel DUVIKA" onerror="this.style.display='none'">
+            <div class="photo-shade"></div>
+            <div class="mission-number">MISI 01</div>
+            <div class="photo-title">KEBUN APEL</div>
+          </div>
+          <div class="mission-info">
+            <div class="mission-meta"><span class="tag tag-green">✦ PEMULA</span><span class="duration">◷ 5–8
+                menit</span></div>
+            <h3>Kebun Perkalian</h3>
+            <p>Bantu Paman Sam menata hasil panen apel dengan menyelesaikan soal perkalian.</p>
+            <div class="mission-footer"><span class="reward">⭐ Hadiah: 100 XP</span><span class="card-hint">Pilih kartu
+                untuk berlatih ↗</span></div>
+          </div>
+        </article>
+        <article class="mission-card market-card">
+          <div class="mission-art mission-photo-art market-art">
+            <div class="photo-fallback market-fallback"><span>🛒</span><strong>PASAR CERIA</strong><small>Ganti dengan
+                foto Pasar Ceria milikmu</small></div><img class="mission-photo" src="prototype_landing/pasar.jpg"
+              alt="Foto area Pasar Ceria DUVIKA" onerror="this.style.display='none'">
+            <div class="photo-shade"></div>
+            <div class="mission-number">MISI 02</div>
+            <div class="photo-title">PASAR CERIA</div>
+            <div class="locked-overlay" id="marketLock">
+              <div class="lock-icon">🔒</div><strong>Selesaikan Misi 1</strong><small>untuk membuka area ini</small>
             </div>
-            <span class="landing-badge">3D LEARNING GAME</span>
-        </header>
+          </div>
+          <div class="mission-info">
+            <div class="mission-meta"><span class="tag tag-orange">✦ TANTANGAN</span><span class="duration">◷ 8–10
+                menit</span></div>
+            <h3>Pasar Perkalian</h3>
+            <p>Jadilah pembeli cerdas! Hitung jumlah barang dan total harga di pasar.</p>
+            <div class="mission-footer"><span class="reward">⭐ Hadiah: 150 XP</span><span class="card-hint"
+                id="marketHint">Pilih kartu untuk berlatih ↗</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-        <main class="landing-main">
-            <section class="landing-copy">
-                <div class="landing-eyebrow">
-                    <span class="eyebrow-dot"></span>
-                    PETUALANGAN DIMULAI DI SINI
-                </div>
+    <section class="implementation section-wrap" id="implementasi">
+      <div class="implementation-heading"><span class="section-kicker">CERITA DI BALIK LAYAR</span>
+        <h2>Implementasi & <span>manfaat DUVIKA</span></h2>
+        <p>Media ini dirancang untuk menghadirkan latihan perkalian yang lebih aktif, kontekstual, dan menyenangkan bagi
+          peserta didik.</p>
+      </div>
+      <div class="implementation-grid">
+        <article class="implementation-card implementation-wide">
+          <div class="implementation-photo character-photo"><img src="prototype_landing/foto1.jpg"
+              alt="Karakter petualang DUVIKA" onerror="this.style.display='none'">
+            <div class="implementation-photo-fallback"></div><span class="photo-label">01 · PENGALAMAN BELAJAR</span>
+          </div>
+          <div class="implementation-copy"><span class="benefit-number">01</span>
+            <h3>Belajar sambil menjelajah</h3>
+            <p>Peserta didik berperan sebagai penjelajah, memilih misi, dan berinteraksi dengan tantangan di setiap
+              area.</p>
+            <div class="benefit-chip">🧭 Aktif dan interaktif</div>
+          </div>
+        </article>
+        <article class="implementation-card">
+          <div class="implementation-photo garden-benefit"><img src="prototype_landing/foto2.jpg"
+              alt="Foto implementasi DUVIKA pertama" onerror="this.style.display='none'">
+            <div class="implementation-photo-fallback"></div><span class="photo-label">02 · IMPLEMENTASI</span>
+          </div>
+          <div class="implementation-copy">
+            <h3>Latihan lebih bermakna</h3>
+            <p>Soal perkalian dikemas lewat konteks kebun dan pasar yang dekat dengan kehidupan sehari-hari.</p>
+          </div>
+        </article>
+        <article class="implementation-card">
+          <div class="implementation-photo market-benefit"><img src="prototype_landing/foto3.jpg"
+              alt="Foto implementasi DUVIKA kedua" onerror="this.style.display='none'">
+            <div class="implementation-photo-fallback">🌟</div><span class="photo-label">03 · MANFAAT</span>
+          </div>
+          <div class="implementation-copy">
+            <h3>Umpan balik dan motivasi</h3>
+            <p>Bintang, poin, dan pembukaan misi membantu peserta didik melihat kemajuan belajarnya.</p>
+          </div>
+        </article>
+      </div>
+      <p class="implementation-note">Galeri ini bisa kamu isi dengan foto dokumentasi saat DUVIKA digunakan, foto layar
+        permainan, atau foto kegiatan belajar peserta didik.</p>
+    </section>
 
-                <h1>
-                    Multiply
-                    <span>Adventure.</span>
-                </h1>
-
-                <p class="landing-description">
-                    Jelajahi dunia virtual, temukan tantangan,
-                    dan taklukkan berbagai misi perkalian.
-                    Belajar matematika jadi petualangan seru!
-                </p>
-
-                <div class="landing-stats">
-                    <div class="landing-stat">
-                        <span class="stat-icon">🌱</span>
-                        <div>
-                            <strong>Jelajahi</strong>
-                            <small>Dunia 3D</small>
-                        </div>
-                    </div>
-
-                    <div class="landing-stat">
-                        <span class="stat-icon">✖</span>
-                        <div>
-                            <strong>Asah Otak</strong>
-                            <small>Tantangan perkalian</small>
-                        </div>
-                    </div>
-
-                    <div class="landing-stat">
-                        <span class="stat-icon">★</span>
-                        <div>
-                            <strong>Kumpulkan</strong>
-                            <small>Poin petualangan</small>
-                        </div>
-                    </div>
-                </div>
-
-                <button id="start-btn" disabled>
-                    <span class="start-button-icon">▶</span>
-                    <span id="start-btn-label">
-                        Memuat Dunia 3D...
-                    </span>
-                    <span class="start-button-arrow">→</span>
-                </button>
-
-                <p class="landing-footnote">
-                    WASD / tombol panah untuk bergerak
-                </p>
-            </section>
-
-            <!-- Dunia 3D dekoratif dibuat melalui Three.js -->
-            <section class="landing-world">
-                <div class="world-glow"></div>
-
-                <div class="world-label world-label-top">
-                    <span class="world-label-icon">✦</span>
-                    Dunia penuh kejutan
-                </div>
-
-                <div id="landing-world-container"></div>
-
-                <div class="world-label world-label-bottom">
-                    <span class="world-label-icon">🎯</span>
-                    Siap menaklukkan misi?
-                </div>
-            </section>
-        </main>
-
-        <footer class="landing-footer">
-            <span>EXPLORE</span>
-            <span class="footer-separator">✦</span>
-            <span>LEARN</span>
-            <span class="footer-separator">✦</span>
-            <span>ACHIEVE</span>
-        </footer>
-
-    </div>
-</div>
-<!-- BANNER DIALOG PEMICU CERITA (HIDDEN DEFAULT) -->
-<div id="story-banner" style="
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    width: min(90%, 500px);
-    background: rgba(255, 255, 255, 0.95);
-    border: 3px solid #22c55e;
-    border-radius: 18px;
-    padding: 12px 18px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    display: none; /* Sembunyikan saat landing */
-    align-items: center;
-    gap: 12px;
-">
-    <div style="font-size: 32px;">👨‍🌾</div>
-    <div style="flex: 1;">
-        <div style="font-size: 11px; font-weight: bold; color: #166534;">PAMAN SAM (PENJAGA KEBUN)</div>
-        <div style="font-size: 13px; font-weight: bold; color: #1e293b; margin-top: 2px;">
-            "Tolong! Hasil panen apel berantakan. Cari Pilar Cahaya Biru untuk membantuku!"
+    <section class="how section-wrap" id="cara-bermain">
+      <div class="how-copy"><span class="section-kicker">GAMPANG BANGET!</span>
+        <h2>Tiga langkah jadi<br><span>jago perkalian.</span></h2>
+        <p>Ikuti alur sederhana ini dan kumpulkan bintang di setiap tantangan.</p><button class="text-btn"
+          id="howStart">Ayo, coba sekarang <span>→</span></button>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon step-blue">🧭</div>
+          <div><span class="step-no">LANGKAH 01</span>
+            <h3>Jelajahi dunia</h3>
+            <p>Pilih area petualangan dan temukan karakter yang membutuhkan bantuanmu.</p>
+          </div>
         </div>
-    </div>
-</div>
-
-<!-- HUD / Adventure Interface -->
-<div id="adventure-hud" class="hidden-game-ui">
-
-    <!-- Profil dan Level -->
-    <div class="hud-profile">
-        <div class="hud-avatar">🧑‍🚀</div>
-
-        <div class="hud-player-info">
-            <div class="hud-player-name">Penjelajah</div>
-            <div class="hud-level">LEVEL <span id="player-level">1</span></div>
-
-            <div class="hud-xp-track">
-                <div id="xp-bar-fill" class="hud-xp-fill"></div>
-            </div>
-            <div class="hud-xp-text">
-                <span>XP PETUALANGAN</span>
-                <span id="xp-text">0 / 100</span>
-            </div>
+        <div class="step">
+          <div class="step-icon step-yellow">🧠</div>
+          <div><span class="step-no">LANGKAH 02</span>
+            <h3>Selesaikan tantangan</h3>
+            <p>Jawab soal perkalian dengan teliti. Kamu bisa mencoba lagi jika belum tepat.</p>
+          </div>
         </div>
-    </div>
-
-    <!-- Hadiah dan Poin -->
-    <div id="score-board" class="hud-reward">
-        <div class="hud-reward-icon">⭐</div>
-        <div class="hud-reward-info">
-            <span class="hud-reward-label">BINTANG</span>
-            <strong id="score-val">0</strong>
+        <div class="step">
+          <div class="step-icon step-green">🏆</div>
+          <div><span class="step-no">LANGKAH 03</span>
+            <h3>Kumpulkan hadiah</h3>
+            <p>Raih bintang dan XP untuk menandai kemajuan belajarmu.</p>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="callout section-wrap" id="tentang">
+      <div class="callout-spark">✦</div>
+      <div><span class="section-kicker">SIAP JADI PENJELAJAH?</span>
+        <h2>Dunia DUVIKA menunggumu!</h2>
+        <p>Belajar matematika bisa terasa menyenangkan ketika kamu ikut terlibat dalam petualangannya.</p>
+        
+      </div>
+      <a href="landing.html"><button class="primary-btn" id="calloutStart">Mulai Sekarang <span>→</span></button>
+    </a>
+      </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand footer-brand" href="#beranda"><span class="brand-mark">✦</span><span
+        class="brand-name">DUVIKA<small>DUNIA VIRTUAL PERKALIAN</small></span></a>
+    <p>Jelajahi dunianya, taklukkan perkaliannya! ✨</p><span class="copyright">Pengembang: Daffa Nanda Prasetya</span>
+  </footer>
+
+  <div class="modal-backdrop" id="quizModal" aria-hidden="true">
+    <div class="quiz-modal" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <button class="modal-close" id="closeQuiz" aria-label="Tutup">×</button>
+      <div class="quiz-top-art" id="quizArt">🍎</div>
+      <span class="section-kicker" id="quizMissionLabel">MISI 01 · KEBUN</span>
+      <h2 id="quizTitle">Tantangan Kebun Perkalian!</h2>
+      <div class="quiz-progress"><span id="questionProgress"></span></div>
+      <div class="quiz-count" id="quizCount">Pertanyaan 1 dari 5</div>
+      <div class="question-box">
+        <p id="quizQuestion">Berapakah 2 × 3?</p>
+      </div>
+      <div class="answer-grid" id="answerGrid"></div>
+      <p class="quiz-feedback" id="quizFeedback" aria-live="polite">Pilih jawaban yang menurutmu benar.</p>
+      <div class="quiz-bottom"><span>⭐ <b id="quizScore">0</b> bintang</span><button class="primary-btn"
+          id="nextQuestion" disabled>Jawab / Lanjut <span>→</span></button></div>
     </div>
-
-    <!-- Status Karakter -->
-    <div id="status" class="hud-status">
-        <span class="hud-status-dot"></span>
-        Diam (Idle)
-    </div>
-
-  <!-- Misi Aktif -->
-<div id="mission-tracker" class="hud-mission">
-    <div class="hud-mission-heading">
-        <span class="hud-mission-icon">🧭</span>
-        <div>
-            <span class="hud-mission-label">MISI AKTIF</span>
-            <strong id="hud-mission-name">Kebun & Pasar Perkalian</strong>
-        </div>
-    </div>
-
-    <!-- Status Penyelesaian Misi -->
-    <div id="mission-status-list" style="margin-top: 8px; font-size: 11px; display: flex; flex-direction: column; gap: 4px;">
-        <div id="status-misi-1" style="color: #cbd5e1;">🎯 Misi 1 (Kebun): <span class="misi-badge" style="color: #f59e0b;">Belum Selesai</span></div>
-        <div id="status-misi-2" style="color: #cbd5e1;">🛍️ Misi 2 (Pasar): <span class="misi-badge" style="color: #f59e0b;">Belum Selesai</span></div>
-    </div>
-
-    <div class="hud-mission-progress" style="margin-top: 6px;">
-        <span class="hud-mission-pin">📍</span>
-        <span>Jarak ke Misi terdekat:</span>
-        <strong><span id="mission-dist">0</span> m</strong>
-    </div>
-</div>
-
-<button id="audio-toggle-btn" title="Mute/Unmute Audio">🔊</button>
-</div>
-
-<!-- Modal Kuis Perkalian -->
-<div id="quiz-modal" class="quiz-overlay hidden">
-    <div class="quiz-card">
-        <h2 id="quiz-title">Tantangan Kebun Perkalian! 🌾</h2>
-        <p id="quiz-question">Berapakah 2 × 2 ?</p>
-        <div class="quiz-inputs">
-            <input type="number" id="quiz-answer" placeholder="Jawaban..." autofocus>
-            <button id="quiz-submit-btn">Jawab 🚀</button>
-        </div>
-        <div id="quiz-feedback"></div>
-        <button id="quiz-close-btn" class="quiz-secondary-btn">Nanti Saja</button>
-    </div>
-</div>
-
-    <!-- Mobile Controls -->
-    <div id="mobile-controls" class="hidden-game-ui">
-        <div class="dpad">
-            <button id="btn-up" class="dpad-btn up">▲</button>
-            <div class="dpad-middle">
-                <button id="btn-left" class="dpad-btn left">◄</button>
-                <button id="btn-right" class="dpad-btn right">►</button>
-            </div>
-            <button id="btn-down" class="dpad-btn down">▼</button>
-        </div>
-        <div class="action-btns">
-            <button id="btn-run" class="action-btn">⚡ Lari</button>
-            <button id="btn-jump" class="action-btn primary">🚀 Lompat</button>
-        </div>
-    </div>
-
-    <!-- Overlay Transisi Pindah Dunia -->
-<div id="world-transition-overlay">
-    <div style="font-size: 40px; animation: rocketFloat 1.5s infinite ease-in-out;">🌀</div>
-    <div class="transition-text" id="transition-title">Memasuki Kebun Perkalian...</div>
-</div>
-
-<!-- MODAL PETUNJUK CARA MAIN -->
-<div id="controls-modal-overlay" class="hidden">
-    <div class="controls-card">
-        <h2>🎮 Cara Bermain</h2>
-        <p>Gunakan kontrol berikut untuk menjelajahi kota dan menemukan Pilar Misi!</p>
-
-        <div class="controls-grid">
-            <!-- Kontrol PC -->
-            <div class="control-box">
-                <h3>💻 Laptop / PC</h3>
-                <div>
-                    <span class="key-badge">W</span>
-                    <span class="key-badge">A</span>
-                    <span class="key-badge">S</span>
-                    <span class="key-badge">D</span>
-                </div>
-                <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
-                    Bergerak
-                </div>
-                <div style="margin-top: 4px;">
-                    <span class="key-badge">Space</span> Melompat
-                </div>
-            </div>
-
-            <!-- Kontrol HP -->
-            <div class="control-box">
-                <h3>📱 HP / Tablet</h3>
-                <div style="font-size: 20px; margin-bottom: 4px;">👆 🕹️</div>
-                <div style="font-size: 11px; color: #64748b;">
-                    Usap layar / Gunakan D-Pad Tombol di Layar
-                </div>
-            </div>
-        </div>
-
-        <button id="close-controls-btn" class="controls-close-btn">Siap Main! 🚀</button>
-    </div>
-</div>
-<!-- Modal Percakapan Paman Sam -->
-<div id="paman-sam-modal" class="quiz-overlay hidden">
-    <div class="quiz-card" style="text-align: center; max-width: 400px;">
-        <div style="font-size: 48px; margin-bottom: 8px;">🧑‍🌾</div>
-        <h3 style="color: #22c55e; margin-bottom: 12px;">PAMAN SAM (PENJAGA KEBUN)</h3>
-        <p id="paman-sam-text" style="color: #e2e8f0; font-size: 15px; line-height: 1.5; margin-bottom: 20px;">
-            "Tolong! Hasil panen apel berantakan. Cari Pilar Cahaya Biru untuk membantuku!"
-        </p>
-        <button id="close-paman-sam-btn" class="action-btn primary" style="width: 100%; padding: 12px;">
-            Siap, Paman! 👍
-        </button>
-    </div>
-</div>
-
-<style>
-#world-transition-overlay.active {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-}
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-</style>
-<script type="module" src="./js/world3d.js?v=6"></script>
-<script type="module" src="./js/game.js?v=2"></script>
-
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="prototype_landing/scriptlandingpage.js"></script>
 </body>
+
 </html>
