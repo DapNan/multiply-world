@@ -211,7 +211,7 @@ function finish() {
   $("backTown").addEventListener("click", () => {
     $("resultOverlay").classList.remove("show");
     localStorage.setItem('multiply_from_mission', 'true'); // Flag untuk posisi kembali
-    window.location.href = 'index.html';
+    window.location.href = 'landing.html';
   });
   $("nextBtn").addEventListener("click",()=>{if(!answered)return;if(orderIndex<4){orderIndex++;renderOrder()}else finish()});
   document.querySelectorAll(".stall").forEach(b=>b.addEventListener("click",()=>startStall(b.dataset.stall)));
